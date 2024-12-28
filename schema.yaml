@@ -1,0 +1,18 @@
+users:
+  documentID: userId
+  userName: String
+  shopName: String
+  mail: String
+  createdAt: Date
+
+  flows:
+    documentID: auto
+    initFirstQuestionId: String
+    questions: String
+    results: String
+    edges: String
+    title: String
+    url: String
+    x: Number
+    y: Number
+    zoom: Number
