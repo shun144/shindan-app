@@ -1,8 +1,8 @@
-import { type Flow } from "@/types";
+import { type FlowType } from "@/types";
 
-export const initialFlows: Flow[] = [
+export const initialFlows: FlowType[] = [
   {
-    id: 1,
+    id: "1",
     title: "サンプルアンケート",
     url: "sample",
     firstQuestionId: "1",

@@ -1,6 +1,7 @@
 import { memo, useEffect, useState } from "react";
 import { type FlowType } from "@/types";
 import { initialFlows } from "@/utils/db";
+import { createFlow, updateFlow, fetchFlows } from "@/db/utils";
 import { MyToaster } from "@/parts/toast/MyToaster";
 import CreateModal from "@/parts/modal/CreateModal";
 import BoardItem from "./BoardItem";
@@ -13,6 +14,17 @@ const MainBoard = () => {
   const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
 
   useEffect(() => {
+    // createFlow("1");
+
+    const userId = "1";
+    const flowId = "1rqDFWxdbKYdDeJKeXe2";
+    const flowData = {
+      x: 100,
+      y: 200,
+    };
+
+    // updateFlow(userId, flowId, flowData);
+    fetchFlows();
     setFlows(initialFlows);
   }, []);
 
