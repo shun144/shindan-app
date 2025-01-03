@@ -2,8 +2,10 @@ import ErrorPage from "@/components/errorPage/ErrorPage";
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "@/layout/Layout";
 import Board from "@/components/board/Board";
-import Respondent, { respondentLoader } from "@/components/respondent/Respondent";
+import RespondentLayout, { respondentLoader } from "@/components/respondent/RespondentLayout";
 import FlowLayout, { flowLoader } from "@/components/flow/FlowLayout";
+import ErrorFlowLaytout from '@/components/flow/ErrorFlowLaytout'
+
 
 export const router = createBrowserRouter([
   {
@@ -17,6 +19,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "flow",
+        errorElement: <ErrorFlowLaytout />,
         children: [
           {
             path: ":flowId",
@@ -32,7 +35,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: ":shopName/:flowUrl",
-        element: <Respondent />,
+        element: <RespondentLayout />,
         loader: respondentLoader,
       },
     ],

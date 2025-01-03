@@ -6,17 +6,29 @@ import { MyToaster } from "@/parts/toast/MyToaster";
 import QuestionSubMenu from "@/components/flow/subMenu/QuestionSubMenu";
 import ResultSubMenu from "@/components/flow/subMenu/ResultSubMenu";
 import { type FlowType } from "@/types";
-import { fetchFlowData } from "@/db/utils/fetchData";
-
-export const flowLoader: LoaderFunction = async ({ params: { flowId } }) => {
-  if (!flowId) throw new Error("No id provided");
-  return {
-    flow: fetchFlowData(flowId),
-  };
-};
+import { fetchFlow } from '@/db/utils';
+import { checkDummyAuthStatus } from '@/utils'
 
 type LoaderData = {
   flow: Promise<FlowType>;
+};
+
+/**
+ * フローデータ取得loader
+ * @param param0 
+ * @returns 
+ */
+export const flowLoader: LoaderFunction = async ({ params: { flowId } }) => {
+  if (!flowId) throw new Response("存在しないflowIdです", { status: 500, statusText: "500error" })
+
+  const userId = checkDummyAuthStatus();
+  if (userId === null) {
+    throw new Response("未認証", { status: 401, statusText: "Unauthorized" });
+  }
+
+  return {
+    flow: fetchFlow(userId, flowId),
+  };
 };
 
 const FlowLayout = () => {
@@ -29,18 +41,6 @@ const FlowLayout = () => {
           <ReactFlowProvider>
             <div className="h-full w-full flex flex-col">
               <Flow {...flowData} />
-              {/* <Flow
-              title={flowData.title}
-              url={flowData.url}
-              initFirstQuestionId={flowData.initFirstQuestionId}
-              initialNodes={[...JSON.parse(flowData.questions), ...JSON.parse(flowData.results)]}
-              initialEdges={JSON.parse(flowData.edges)}
-              initialViewport={{
-                x: flowData.x,
-                y: flowData.y,
-                zoom: flowData.zoom,
-              }}
-            /> */}
             </div>
             <MyToaster />
             <QuestionSubMenu />
@@ -53,55 +53,3 @@ const FlowLayout = () => {
 };
 
 export default memo(FlowLayout);
-
-// import { ReactFlowProvider } from "@xyflow/react";
-// import { memo, useEffect } from "react";
-// import Flow from "./Flow";
-// import { useParams } from "react-router-dom";
-// import { MyToaster } from "@/parts/toast/MyToaster";
-// import QuestionSubMenu from "@/components/flow/subMenu/QuestionSubMenu";
-// import ResultSubMenu from "@/components/flow/subMenu/ResultSubMenu";
-// // import { initialQuestions, initialResults, initialEdges, initialX, initialY, initialZoom } from "@/utils/db";
-// import useGetDoc from "@/db/useGetDoc";
-
-// type Props = {
-//   // questions: string;
-//   // results: string;
-//   // edges: string;
-//   // title: string;
-//   // url: string;
-//   // initFirstQuestionId: string;
-//   // x: number;
-//   // y: number;
-//   // zoom: number;
-// };
-
-// const FlowLayout = () => {
-//   const { id } = useParams();
-
-//   const { initialQuestions, initialResults, initialEdges, initialX, initialY, initialZoom } = useGetDoc(id!);
-
-//   return (
-//     <>
-//       <ReactFlowProvider>
-//         <div className="h-full w-full flex flex-col">
-//           {/* <Flow
-//             initialNodes={[...JSON.parse(initialQuestions), ...JSON.parse(initialResults)]}
-//             initialEdges={JSON.parse(initialEdges)}
-//             defaultViewport={{
-//               x: initialX,
-//               y: initialY,
-//               zoom: initialZoom,
-//             }}
-//           /> */}
-//         </div>
-
-//         <MyToaster />
-//         <QuestionSubMenu />
-//         <ResultSubMenu />
-//       </ReactFlowProvider>
-//     </>
-//   );
-// };
-
-// export default memo(FlowLayout);

@@ -1,18 +1,21 @@
-import { memo, MouseEventHandler } from "react";
+import { memo, MouseEventHandler, useCallback } from "react";
 // import { useOwnerStore } from "@/Pages/Owner/store";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { actions } from "@/store/slice/flowSlice";
 import { useReactFlow } from "@xyflow/react";
 import { toast } from "@/parts/toast/MyToaster";
-import { useParams } from "react-router-dom";
-import { updateFlowData } from "@/db/utils/updateData";
+import { useParams, useBeforeUnload, unstable_usePrompt } from "react-router-dom";
+import { updateFlow, UpdateFlowArgs } from '@/db/utils'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { FlowType } from "@/types";
+import { checkDummyAuthStatus } from "@/utils";
+import { buttonTv } from '@/tv'
+import useFlowSubmitValidate from './useFlowSubmitValidate'
+
+
+
 
 const FlowSubmit = () => {
-  const { flowId } = useParams();
-  const { getNodes, getEdges, getViewport } = useReactFlow();
-
-  const dispatch = useAppDispatch();
 
   const { firstNodeId, isDirty, flowTitle, flowUrl, flowImages } = useAppSelector((state) => ({
     firstNodeId: state.flow.firstNodeId,
@@ -21,10 +24,43 @@ const FlowSubmit = () => {
     flowUrl: state.flow.flowUrl,
     flowImages: state.flow.flowImages,
   }));
-  //   const setSubmitError = useOwnerStore((state) => state.setSubmitError);
+
+
+  const userId = checkDummyAuthStatus() as string;
+
+  const { flowId } = useParams();
+
+  const { checkIsValidateError } = useFlowSubmitValidate(flowId!);
+
+  const { getNodes, getEdges, getViewport } = useReactFlow();
+
+
+  const dispatch = useAppDispatch();
+  const updateFlowMutation = useMutation<boolean, Error, UpdateFlowArgs>({
+    mutationFn: (args) => updateFlow(args)
+  })
+
+  // ページリロード時の確認ダイアログ
+  // beforeunloadは標準ダイアログしかだせない
+  useBeforeUnload(useCallback((event) => {
+    if (!isDirty) return
+    event.preventDefault();
+  }, [isDirty]));
+
+  // 別SPAページに遷移する際の確認ダイアログ
+  unstable_usePrompt({
+    message: "保存されていないアンケートの変更があります",
+    when: ({ currentLocation, nextLocation }) =>
+      isDirty && currentLocation.pathname !== nextLocation.pathname,
+  });
 
   const handleSubmit: MouseEventHandler = async (event) => {
     event.preventDefault();
+
+    // タイトルとURLのエラークリア
+    dispatch(actions.clearSubmitError())
+
+    if (await checkIsValidateError()) return;
 
     const nodes = getNodes();
     const edges = getEdges();
@@ -32,30 +68,36 @@ const FlowSubmit = () => {
     const results = nodes.filter((x) => x.type === "rNode");
     const { x, y, zoom } = getViewport();
 
-    const data: Omit<FlowType, "id"> = {
-      title: flowTitle,
-      url: flowUrl,
-      initFirstQuestionId: firstNodeId,
-      questions: JSON.stringify(questions),
-      results: JSON.stringify(results),
-      edges: JSON.stringify(edges),
-      x,
-      y,
-      zoom,
+    const updateFlowArgs: UpdateFlowArgs = {
+      userId: userId!,
+      flowData: {
+        id: flowId!,
+        title: flowTitle,
+        url: flowUrl,
+        initFirstQuestionId: firstNodeId,
+        questions: JSON.stringify(questions),
+        results: JSON.stringify(results),
+        edges: JSON.stringify(edges),
+        x,
+        y,
+        zoom,
+      }
     };
 
-    updateFlowData(flowId!, data, {
+    updateFlowMutation.mutate(updateFlowArgs, {
       onSuccess: () => {
-        // setSubmitError({});
         toast.success("保存しました", { duration: 4000 });
         dispatch(actions.setIsDirty(false));
       },
+      onError: () => {
+        toast.error("保存に失敗しました", { duration: 5000 });
+        dispatch(actions.setIsDirty(true));
+      }
     });
 
-    // if (!firstNodeId) {
-    //   toast.error("1問目の質問を作成してください", { duration: 5000 });
-    //   return;
-    // }
+
+
+
 
     // const nodes = getNodes();
     // const edges = getEdges();
@@ -98,18 +140,19 @@ const FlowSubmit = () => {
     // });
   };
 
+
   return (
-    <>
-      <button onClick={handleSubmit} className="relative w-full h-full bg-indigo-500 px-2 text-white rounded-md shadow-xl transition-all hover:bg-indigo-600 select-none hover:shadow-xl duration-200">
-        保 存
-        {isDirty && (
-          <span className="absolute flex h-3 w-3 -top-1 -right-1">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-rose-500 opacity-85"></span>
-          </span>
-        )}
-      </button>
-    </>
+    <button onClick={handleSubmit}
+      className={buttonTv({ className: "relative" })}
+    >
+      保 存
+      {isDirty && (
+        <span className="absolute flex h-3 w-3 -top-1 -right-1">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-3 w-3 bg-rose-500 opacity-85"></span>
+        </span>
+      )}
+    </button>
   );
 };
 

@@ -2,9 +2,9 @@ export const collectonName = "users";
 
 export const initialFlow = {
   initFirstQuestionId: "",
-  questions: "",
-  results: "",
-  edges: "",
+  questions: "[]",
+  results: "[]",
+  edges: "[]",
   title: "",
   url: "",
   x: 0,

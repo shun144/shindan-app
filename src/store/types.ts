@@ -5,6 +5,12 @@ export interface FlowImage {
   file: File;
 }
 
+export type SubmitError = {
+  title?: string,
+  url?: string,
+} | null;
+
+
 export interface FlowState {
   flowId?: number;
   flowTitle: string;
@@ -15,6 +21,9 @@ export interface FlowState {
   rNodeNum: number;
   isSidebarOpen: boolean;
   flowImages: FlowImage[];
+  // submitError: SubmitError | null,
+  submitTitleError?: string;
+  submitUrlError?: string;
   //   submitError: SubmitError;
   //   flowImages: FlowImage[];
 }
@@ -33,3 +42,5 @@ export interface UserState {
   mail: string;
   shopName: string;
 }
+
+

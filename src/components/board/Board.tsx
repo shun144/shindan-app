@@ -1,32 +1,29 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useState } from "react";
 import { type FlowType } from "@/types";
-import { initialFlows } from "@/utils/db";
 import { createFlow, updateFlow, fetchFlows } from "@/db/utils";
 import { MyToaster } from "@/parts/toast/MyToaster";
 import CreateModal from "@/parts/modal/CreateModal";
 import BoardItem from "./BoardItem";
 import BoardMenu from "./BoardMenu";
-
 import "react-contexify/dist/ReactContexify.css";
+import { useAppSelector } from '@/store/store'
+import { useQuery, UseQueryResult, QueryFunctionContext } from "@tanstack/react-query";
+
+const fetchFunc = async ({ queryKey }: QueryFunctionContext<[string, string]>) => {
+  const [, userId] = queryKey;
+  const res = await fetchFlows(userId);
+  return res;
+};
 
 const MainBoard = () => {
-  const [flows, setFlows] = useState<FlowType[]>([]);
   const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
 
-  useEffect(() => {
-    // createFlow("1");
+  const userId = useAppSelector((state) => state.user.userId);
 
-    const userId = "1";
-    const flowId = "1rqDFWxdbKYdDeJKeXe2";
-    const flowData = {
-      x: 100,
-      y: 200,
-    };
-
-    // updateFlow(userId, flowId, flowData);
-    fetchFlows();
-    setFlows(initialFlows);
-  }, []);
+  const { data: flows, isLoading }: UseQueryResult<FlowType[] | undefined> = useQuery({
+    queryKey: ['flows', userId],
+    queryFn: fetchFunc,
+  });
 
   return (
     <>
@@ -34,15 +31,19 @@ const MainBoard = () => {
         <div className="w-full h-full flex justify-center items-center">
           <div className="grow h-full flex justify-center items-center ">
             <div className="w-11/12 h-full ">
-              {flows.length ? (
+
+              {isLoading ? (
+                <div>ロード中</div>
+              ) : flows?.length === 0 ? (
+                <div className="w-full h-full flex justify-center items-start">
+                  <div className="text-3xl font-bold select-none text-slate-400/80">
+                    作成ボタンからアンケートを作成してください
+                  </div>
+                </div>) : (
                 <div className="grid grid-cols-5 gap-8 pt-20">
-                  {flows.map(({ id, title, url }) => (
+                  {flows?.map(({ id, title, url }) => (
                     <BoardItem key={id} id={id} title={title} fullUrl={`${url}`} />
                   ))}
-                </div>
-              ) : (
-                <div className="w-full h-full flex justify-center items-start">
-                  <div className="text-3xl font-bold select-none text-slate-400/80">作成ボタンからアンケートを作成してください</div>
                 </div>
               )}
             </div>
@@ -54,14 +55,14 @@ const MainBoard = () => {
               </button>
             </div>
           </div>
-        </div>
-      </div>
+        </div >
+      </div >
 
       <MyToaster />
 
       <CreateModal isOpenModal={isOpenCreateModal} setIsOpenModal={setIsOpenCreateModal} />
 
-      <BoardMenu setFlows={setFlows} />
+      <BoardMenu />
     </>
   );
 };

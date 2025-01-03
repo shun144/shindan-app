@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RespondentItem } from "@/components/respondent/types";
 import { RespondentState } from "@/store/types";
+import { AnswerHistoryType } from '@/components/respondent/types'
 
 const initCurrItemValue: RespondentItem = {
   id: "",
@@ -21,19 +22,27 @@ const respondentSlice = createSlice({
   name: "respondent",
   initialState,
   reducers: {
-    setCurrItem(state, { payload }: PayloadAction<string>) {
+    setItems(state, { payload }: PayloadAction<RespondentItem[]>) {
+      state.items = payload
+    },
+    setCurrItem(state, { payload }: PayloadAction<string | undefined>) {
       state.currItem = state.items.find((x) => x.id === payload) ?? initCurrItemValue;
     },
-    setAnswerHistories(state, { payload: { id, question, answer } }: PayloadAction<{ id: string; question: string; answer: string }>) {
+    setAnswerHistories(state, { payload }: PayloadAction<AnswerHistoryType>) {
       state.answerHistories = [
         ...state.answerHistories,
         {
-          id,
-          question,
-          answer,
+          id: payload.id,
+          question: payload.question,
+          answer: payload.answer,
         },
       ];
     },
+
+    backStep(state) {
+      state.currItem = state.items.find(x => x.id === state.answerHistories[state.answerHistories.length - 1].id)!;
+      state.answerHistories = state.answerHistories.slice(0, -1);
+    }
   },
 });
 

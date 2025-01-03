@@ -16,7 +16,7 @@ import { FlowType } from "@/types";
 
 const Flow = (props: FlowType) => {
   const dispatch = useAppDispatch();
-  const isDirty = useAppSelector((state) => state.flow.isDirty);
+  // const isDirty = useAppSelector((state) => state.flow.isDirty);
   const { screenToFlowPosition } = useReactFlow();
 
   const { nodes, nodeTypes, onNodesChange, onAddQuestion, onAddResult } = useNodeHook([...JSON.parse(props.questions), ...JSON.parse(props.results)]);
@@ -26,6 +26,7 @@ const Flow = (props: FlowType) => {
   useEffect(() => {
     dispatch(actions.setFlowTitle(props.title));
     dispatch(actions.setFlowUrl(props.url));
+    dispatch(actions.setFirstNodeId(props.initFirstQuestionId))
   }, [props.title, props.url, dispatch]);
 
   //   useEffect(() => {

@@ -18,3 +18,5 @@ export const resultMaxLength = 80;
 
 /** メッセージの最大文字数 */
 export const messageMaxLength = 150;
+
+

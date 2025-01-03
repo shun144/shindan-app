@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { type FlowState, type FlowImage } from "@/store/types";
+import { type FlowState, type FlowImage, type SubmitError } from "@/store/types";
 
 const initialState: FlowState = {
   flowId: undefined,
@@ -11,6 +11,7 @@ const initialState: FlowState = {
   rNodeNum: 0,
   isSidebarOpen: true,
   flowImages: [],
+  // submitError: null,
 };
 
 const flowSlice = createSlice({
@@ -22,6 +23,9 @@ const flowSlice = createSlice({
     },
     setFlowTitle(state, { payload }: PayloadAction<string>) {
       state.flowTitle = payload;
+    },
+    setFirstNodeId(state, { payload }: PayloadAction<string>) {
+      state.firstNodeId = payload;
     },
     setFlowUrl(state, { payload }: PayloadAction<string>) {
       state.flowUrl = payload;
@@ -38,9 +42,7 @@ const flowSlice = createSlice({
     addRnodeNum(state, { payload }: PayloadAction<number>) {
       state.rNodeNum += payload;
     },
-    setFirstNodeId(state, { payload }: PayloadAction<string>) {
-      state.firstNodeId = payload;
-    },
+
     setIsDirty(state, { payload }: PayloadAction<boolean>) {
       state.isDirty = payload;
     },
@@ -50,6 +52,26 @@ const flowSlice = createSlice({
     delImage(state, { payload }: PayloadAction<string>) {
       state.flowImages = state.flowImages.filter((x) => x.nodeId !== payload);
     },
+    setSubmitTItleError(state, { payload }: PayloadAction<string | undefined>) {
+      state.submitTitleError = payload
+    },
+    setSubmitUrlError(state, { payload }: PayloadAction<string | undefined>) {
+      state.submitUrlError = payload
+    },
+    clearSubmitError(state) {
+      state.submitTitleError = undefined;
+      state.submitUrlError = undefined;
+    },
+    // clearSubmitError(state) {
+    //   state.submitError = null
+    // },
+    // setSubmitError(state, { payload }: PayloadAction<SubmitError>) {
+    //   if (payload === null) {
+    //     state.submitError = payload
+    //   }
+    //   state.submitError = { ...state.submitError, ...payload }
+    // }
+
   },
 });
 

@@ -17,3 +17,18 @@ export interface FlowType {
   y: number;
   zoom: number;
 }
+
+
+export type CreateFLowArgs = {
+  userId: string;
+  title: string;
+  url: string;
+};
+
+
+// エラーの型定義
+export type RouteError = {
+  status?: number;
+  statusText?: string;
+  message?: string;
+}

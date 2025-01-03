@@ -1,12 +1,10 @@
-import { memo, useCallback, useState, Dispatch, SetStateAction, useMemo } from "react";
+import { memo, useCallback, useState, useMemo } from "react";
 import { Menu, Item, TriggerEvent, ItemParams, useContextMenu } from "react-contexify";
 import { toast } from "@/parts/toast/MyToaster";
 import { FlowType } from "@/types";
 import EditModal from "@/parts/modal/EditModal";
-
-type Props = {
-  setFlows: Dispatch<SetStateAction<FlowType[]>>;
-};
+import { deleteFlow } from '@/db/utils'
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const MENU_ID = "board-menu";
 
@@ -15,31 +13,43 @@ export const displayMenu = (event: TriggerEvent, flowId: string, title: string, 
   show({ event, props: { flowId, title, url } });
 };
 
-const deleteFlow = (flowid: any) => {
-  return new Promise((resolve) => setTimeout(resolve, 2000));
+// const deleteFlow = (flowid: any) => {
+//   return new Promise((resolve) => setTimeout(resolve, 2000));
+// };
+
+type DeleteFLowArgs = {
+  userId: string;
+  flowId: string;
 };
 
-const BoardMenu = ({ setFlows }: Props) => {
+
+const BoardMenu = () => {
   const [editTitle, setEditTitle] = useState("");
   const [editUrl, setEditUrl] = useState("");
   const [editId, setEditId] = useState(0);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
 
-  const BASE_URL = useMemo(() => import.meta.env.VITE_BASE_URL, []);
+  const queryClient = useQueryClient();
+  const deleteFlowMutation = useMutation<string, Error, DeleteFLowArgs>({
+    mutationFn: ({ userId, flowId }) => deleteFlow({ userId, flowId }),
+    onSuccess: (flowId) => {
+      queryClient.setQueryData(['flows', "1"], (oldFlows: FlowType[]) => {
+        return oldFlows.filter(flow => flow.id !== flowId)
+      })
+    }
+  });
 
-  const handleFlowDelete = useCallback(({ props: { flowId, title } }: ItemParams) => {
+
+
+  const BASE_URL = useMemo(() => import.meta.env.VITE_BASE_URL, []);
+  const handleFlowDelete = ({ props: { flowId, title } }: ItemParams) => {
     if (!confirm(`${title}を削除してよろしいですか？`)) return;
 
-    (async () => {
-      const res = await deleteFlow(flowId);
-      if (res) {
-        toast.success(`${title}を削除しました`);
-        setFlows((prev) => prev.filter((x) => x.id !== flowId));
-      } else {
-        toast.error(`${title}の削除に失敗しました`);
-      }
-    })();
-  }, []);
+    deleteFlowMutation.mutate({ userId: "1", flowId });
+
+  }
+
+
 
   const handleOpenEditModal = useCallback(
     ({ props: { title, url, flowId } }: ItemParams) => {
@@ -54,7 +64,6 @@ const BoardMenu = ({ setFlows }: Props) => {
   const handleCopy = useCallback(async ({ props: { url } }: ItemParams) => {
     try {
       const flowFullUrl = `${BASE_URL}/${url}`;
-      //   const flowFullUrl = `${BASE_URL}/${owner}/${url}`;
       await navigator.clipboard.writeText(flowFullUrl);
       toast.success("URLをクリップボードにコピーしました", {
         duration: 3000,

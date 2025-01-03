@@ -5,27 +5,42 @@ import layoutReducer from "@/store/slice/layoutSlice";
 import respondentReducer from "@/store/slice/respondentSlice";
 import userReducer from "@/store/slice/userSlice";
 
-import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+// import { persistStore, persistReducer } from "redux-persist";
+// import storage from "redux-persist/lib/storage";
 
-const persistConfig = {
-  key: "root", // ストレージに保存するキー
-  storage,
-};
+// const persistConfig = {
+//   key: "root", // ストレージに保存するキー
+//   storage,
+// };
 
-const persistedReducer = persistReducer(persistConfig, userReducer);
+// const logMiddleware = (store) => (next) => (action) => {
+//   console.log("Dispatching action:", action);
+//   return next(action);
+// };
+
+
+// const persistedReducer = persistReducer(persistConfig, userReducer);
 
 const store = configureStore({
   reducer: {
     flow: flowReducer,
     layout: layoutReducer,
     respondent: respondentReducer,
-    user: persistedReducer,
-    // user: userReducer,
+    // user: persistedReducer,
+    user: userReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        // 非シリアライズ可能な値を無視するための例外を指定
+        ignoredActions: [
+          "persist/PERSIST",
+        ],
+      },
+    }),
 });
 
-const persistor = persistStore(store);
+// const persistor = persistStore(store);
 
 // stateの型を全部取得する
 export type RootState = ReturnType<typeof store.getState>;
@@ -37,4 +52,6 @@ export type RootDispatch = typeof store.dispatch;
 const useAppSelector = useSelector.withTypes<RootState>();
 const useAppDispatch = useDispatch.withTypes<RootDispatch>();
 
-export { store, useAppSelector, useAppDispatch, persistor };
+export { store, useAppSelector, useAppDispatch };
+
+// export { store, useAppSelector, useAppDispatch, persistor };

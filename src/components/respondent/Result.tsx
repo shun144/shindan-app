@@ -1,12 +1,13 @@
-import { memo, useEffect, useState } from "react";
-import { ResultType } from "@/Pages/Respondent/types";
-import { useRespondentStore } from "@/Pages/Respondent/store";
+import { memo, useEffect } from "react";
+import { ResultType } from "@/components/respondent/types";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { actions as respondentActions } from "@/store/slice/respondentSlice";
 import { MdOutlineRestartAlt } from "react-icons/md";
-import { countUpAchievement } from "@/Pages/Respondent/utils";
+import { countUpAchievement } from "@/components/respondent/utils";
 import "react-responsive-pagination/themes/classic.css";
 import "./Result.css";
 import ResultBg from "./ResultBg";
-import useCheckOverHight from "@/Pages/Respondent/hooks/useCheckOverHight";
+import useCheckOverHight from "@/components/respondent/hooks/useCheckOverHight";
 import { motion, useAnimation } from "framer-motion";
 
 const Result = () => {
@@ -79,9 +80,8 @@ const Result = () => {
                 >
                     <div
                         ref={refResult}
-                        className={`w-full sm:max-h-96 max-h-48 overflow-y-auto mt-3 md:mt-6 flex flex-col ${
-                            isResultOverHeight ? "items-start" : "items-center"
-                        }`}
+                        className={`w-full sm:max-h-96 max-h-48 overflow-y-auto mt-3 md:mt-6 flex flex-col ${isResultOverHeight ? "items-start" : "items-center"
+                            }`}
                     >
                         <div className="whitespace-pre-wrap w-full text-base md:text-3xl min-h-12 text-slate-700 font-semibold flex justify-center break-all">
                             {currentQuestionnarie.result}
@@ -99,9 +99,8 @@ const Result = () => {
                     <div className="w-full border-b-2 border-violet-600/20 my-3 md:my-6" />
 
                     <div
-                        className={`w-full overflow-y-auto mb-3 md:mb-6 flex ${
-                            isMsgOverHeight ? "items-start" : "items-center"
-                        }`}
+                        className={`w-full overflow-y-auto mb-3 md:mb-6 flex ${isMsgOverHeight ? "items-start" : "items-center"
+                            }`}
                         ref={refMsg}
                     >
                         <div className="whitespace-pre-wrap w-full text-base md:text-2xl min-h-20 text-slate-600 font-normal flex justify-center break-all">

@@ -14,22 +14,23 @@ const FlowPanel = () => {
     <>
       {/* 保存ボタン */}
       <Panel position="top-left">
-        <Droppable id="panel-area-0">
+        {/* ドロップ対象外エリアにするためDroppableコンポーネントで囲む */}
+        <Droppable id="panel-area-0" className="flex justify-center items-center w-24 bg-transparent">
           <FlowSubmit />
         </Droppable>
       </Panel>
 
       {/* Title/URL */}
       <Panel position="top-right">
-        <Droppable id="panel-area-1">
-          <div className="w-96 py-3 bg-slate-800 rounded-md shadow flex flex-col justify-around items-center">
-            <FlowInput />
-          </div>
+        <Droppable id="panel-area-1"
+          className="w-96 py-3 bg-slate-800 rounded-md shadow flex flex-col justify-around items-center">
+          <FlowInput />
         </Droppable>
+
       </Panel>
 
       {/* 質問/結果ノード */}
-      <Panel position="top-left" className="panel-top-10">
+      <Panel position="top-left" className="panel-top-14">
         <Droppable id="panel-area-2">
           <div className="w-24 h-60 py-3 bg-slate-800 rounded-md shadow flex flex-col justify-around items-center">
             <Draggable id="draggable-question" label="質問" color="indigo" nodeNum={qNodeNum} maxNodeNum={questionNodeMaxNum} />
