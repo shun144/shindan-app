@@ -10,11 +10,26 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
+      # リポジトリのコードを取得するための公式アクション(GitHub Actionsでジョブを実行する前に、リポジトリの内容をローカルにクローン)
       - uses: actions/checkout@v4
+
+      # 依存関係をクリーンにインストール
+      - run: npm ci
+
+      # アプリケーションをビルド
       - run: npm run build
+
+      # Firebase Hostingにデプロイ
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
+          # GitHubリポジトリのトークンを利用して、Firebaseへデプロイ権限を付与
           repoToken: ${{ secrets.GITHUB_TOKEN }}
+
+          # Firebaseプロジェクトのサービスアカウント情報をGitHub Secretsから取得
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SHINDAN_APP }}
+
+          # Firebase Hostingの「ライブ」チャンネル（本番環境）にデプロイするよう指定
           channelId: live
+
+          # FirebaseプロジェクトIDを指定
           projectId: shindan-app
