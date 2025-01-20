@@ -1,8 +1,10 @@
-import { ChangeEvent, memo, useCallback, MouseEvent, useState, useRef, useMemo } from "react";
+import { ChangeEvent, memo, useCallback, MouseEvent, useState, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { actions } from "@/store/slice/flowSlice";
 import { Tooltip } from "react-tooltip";
 import { MdContentCopy } from "react-icons/md";
+
+const BASE_URL = window.location.origin;
 
 const FlowUrlInput = () => {
   const dispatch = useAppDispatch();
@@ -12,8 +14,6 @@ const FlowUrlInput = () => {
   const submitUrlError = useAppSelector((state) => state.flow.submitUrlError);
   const [showTooltip, setShowTooltip] = useState(false);
   const refUrl = useRef<HTMLInputElement | null>(null);
-
-  const BASE_URL = useMemo(() => import.meta.env.VITE_BASE_URL, []);
 
   const handleChangeUrl = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {

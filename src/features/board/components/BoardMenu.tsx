@@ -1,4 +1,4 @@
-import { memo, useMemo } from "react";
+import { memo } from "react";
 import { Menu, Item } from "react-contexify";
 import { toast } from "react-hot-toast";
 import "@/features/board/assets/boardMenu.scss";
@@ -12,12 +12,13 @@ type Props = {
   handleOpenEditModal: (boardItem: BoardItemType) => void;
 };
 
+const BASE_URL = window.location.origin;
+
 const BoardMenu = ({ menuId, boardItem, handleOpenEditModal }: Props) => {
   const { userId, shopName } = checkDummyAuthStatus();
   const { flowId, title, url } = boardItem;
 
   const { deleteFlowMutation } = useDeleteFlow();
-  const BASE_URL = useMemo(() => import.meta.env.VITE_BASE_URL, []);
 
   // 編集用モーダル表示
   const openModal = () => {

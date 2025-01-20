@@ -7,12 +7,10 @@ type Props = {
   nodeId: string;
   initImgUrl?: string;
 };
-
+const BASE_URL = window.location.origin;
 const ImageUploader = ({ nodeId, initImgUrl }: Props) => {
   const { updateNodeData } = useReactFlow();
-  // const dispatch = useAppDispatch();
   const { setFile, removeFile } = useFileContext();
-  const BASE_URL = useMemo(() => import.meta.env.VITE_BASE_URL, []);
   const IMG_ID = useMemo(() => `img-${nodeId}`, [nodeId]);
 
   const [imageData, setImageData] = useState<File | string | undefined>(initImgUrl);
