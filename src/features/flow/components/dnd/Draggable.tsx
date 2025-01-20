@@ -30,7 +30,7 @@ const Draggable = ({ id, label, color, nodeNum, maxNodeNum }: Props) => {
   const { setNodeRef, listeners, attributes, transform, isDragging } = useDraggable({ id });
 
   const transformStyle = transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined;
-  const isDisabled = useMemo(() => nodeNum >= maxNodeNum, [nodeNum]);
+  const isDisabled = useMemo(() => nodeNum >= maxNodeNum, [nodeNum, maxNodeNum]);
 
   return (
     <div

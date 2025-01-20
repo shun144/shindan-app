@@ -1,7 +1,7 @@
-import React from "react";
+import { memo } from "react";
 
 const FlowHeader = () => {
   return <div>FlowHeader</div>;
 };
 
-export default FlowHeader;
+export default memo(FlowHeader);

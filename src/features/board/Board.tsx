@@ -1,7 +1,7 @@
 import { memo, useState } from "react";
 import { type FlowType } from "@/types";
 import { fetchFlows } from "@/db/functions/flow";
-import { MyToaster } from "@/components/toast/MyToaster";
+import { MyToaster } from "@/components";
 import { BoardItem, CreateModal, EditModal } from "@/features/board/components";
 import { useAppSelector } from "@/store/store";
 import { useQuery, UseQueryResult, QueryFunctionContext } from "@tanstack/react-query";

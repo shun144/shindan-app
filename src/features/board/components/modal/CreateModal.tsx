@@ -9,7 +9,7 @@ type Props = {
 };
 
 const CreateModal = ({ isOpenModal, setIsOpenModal }: Props) => {
-  const closeModal = useCallback(() => setIsOpenModal(false), []);
+  const closeModal = useCallback(() => setIsOpenModal(false), [setIsOpenModal]);
 
   const { register, handleSubmitForm, errors } = useCreateFlow(closeModal);
   return (

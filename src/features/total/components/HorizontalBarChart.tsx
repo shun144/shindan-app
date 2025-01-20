@@ -1,5 +1,14 @@
 import { memo, useMemo } from "react";
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, TooltipItem, TooltipModel } from "chart.js";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  TooltipItem,
+} from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { QueryFunctionContext, useQuery } from "@tanstack/react-query";
 import { colorList } from "@/features/total/constants";
@@ -12,14 +21,16 @@ interface Props {
 }
 
 const fetchFunc = async ({ queryKey }: QueryFunctionContext<[string, FetchGraphDataArgs]>) => {
-  const [_key, args] = queryKey;
+  const [, args] = queryKey;
   const res = await fetchGraphData(args);
   const resData = {
     labels: res.answers,
     datasets: [
       {
         data: res.counts,
-        backgroundColor: res.counts.map((_, idx) => `rgba(${colorList[idx % colorList.length]},0.4)`),
+        backgroundColor: res.counts.map(
+          (_, idx) => `rgba(${colorList[idx % colorList.length]},0.4)`
+        ),
         borderColor: res.counts.map((_, idx) => `rgba(${colorList[idx % colorList.length]},1)`),
         borderWidth: 1,
         barThickness: 20, // 固定幅
@@ -37,7 +48,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 const regex = new RegExp(".{1,25}", "g");
 
 const HorizontalBarChart = ({ flowId, chartHeight }: Props) => {
-  const userId = checkDummyAuthStatus() as string;
+  const { userId } = checkDummyAuthStatus();
 
   const { isPending, error, data } = useQuery({
     queryKey: ["barChart", { userId, flowId }],
@@ -58,7 +69,10 @@ const HorizontalBarChart = ({ flowId, chartHeight }: Props) => {
         title: { display: false, text: "title" },
         tooltip: {
           callbacks: {
-            label: ({ label, raw }: TooltipItem<"bar">) => [...(label.match(regex) || [label]), `【${Number(raw).toLocaleString()}回】`],
+            label: ({ label, raw }: TooltipItem<"bar">) => [
+              ...(label.match(regex) || [label]),
+              `【${Number(raw).toLocaleString()}回】`,
+            ],
             title: () => "",
           },
           bodySpacing: 10,

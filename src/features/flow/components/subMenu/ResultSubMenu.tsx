@@ -1,31 +1,38 @@
 import { memo } from "react";
-import { Menu, Item, TriggerEvent, ItemParams, useContextMenu } from "react-contexify";
+import { Menu, Item, ItemParams } from "react-contexify";
 import { useCallback } from "react";
 import { useReactFlow } from "@xyflow/react";
 import { useAppDispatch } from "@/store/store";
 import { actions } from "@/store/slice/flowSlice";
 
-const RESUTL_MENU_ID = "result-menu-id";
-const { show } = useContextMenu({ id: RESUTL_MENU_ID });
+import { RESULT_MENU_ID } from "@/features/flow/hooks/useResultContextMenu";
 
-export const showResultContextMenu = (event: TriggerEvent, nodeId: string) => {
-  show({ event, props: { nodeId } });
-};
+// export const useResultContextMenu = () => {
+//   const { show } = useContextMenu({ id: MENU_ID });
+
+//   const showResultContextMenu = (event: TriggerEvent, nodeId: string) => {
+//     show({ event, props: { nodeId } });
+//   };
+//   return { showResultContextMenu };
+// };
 
 const ResultSubMenu = () => {
   const dispatch = useAppDispatch();
   const { deleteElements } = useReactFlow();
 
-  const deleteNode = useCallback((params: ItemParams) => {
-    if (!params.props) {
-      return;
-    }
-    deleteElements({ nodes: [{ id: params.props["nodeId"] }] });
-    dispatch(actions.addRnodeNum(-1));
-  }, []);
+  const deleteNode = useCallback(
+    (params: ItemParams) => {
+      if (!params.props) {
+        return;
+      }
+      deleteElements({ nodes: [{ id: params.props["nodeId"] }] });
+      dispatch(actions.addRnodeNum(-1));
+    },
+    [deleteElements, dispatch]
+  );
 
   return (
-    <Menu id={RESUTL_MENU_ID}>
+    <Menu id={RESULT_MENU_ID}>
       <Item closeOnClick={true} onClick={(params) => deleteNode(params)}>
         削除
       </Item>

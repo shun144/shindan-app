@@ -15,10 +15,13 @@ const FlowUrlInput = () => {
 
   const BASE_URL = useMemo(() => import.meta.env.VITE_BASE_URL, []);
 
-  const handleChangeUrl = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(actions.setFlowUrl(e.currentTarget.value));
-    dispatch(actions.setIsDirty(true));
-  }, []);
+  const handleChangeUrl = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      dispatch(actions.setFlowUrl(e.currentTarget.value));
+      dispatch(actions.setIsDirty(true));
+    },
+    [dispatch]
+  );
 
   const handleCopy = async (e: MouseEvent<HTMLButtonElement>) => {
     try {

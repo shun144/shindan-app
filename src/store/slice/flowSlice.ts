@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { type FlowState, type FlowImage, type SubmitError } from "@/store/types";
+import { type FlowState } from "@/store/types";
 
 const initialState: FlowState = {
   flowId: undefined,

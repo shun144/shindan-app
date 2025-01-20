@@ -1,10 +1,10 @@
 import { createContext, Dispatch, SetStateAction, useState, PropsWithChildren } from "react";
 
-interface ContextType {
+export type DropdownContextType = {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   toggleOpen: () => void;
-}
+};
 
 const initValue = {
   open: false,
@@ -12,7 +12,7 @@ const initValue = {
   toggleOpen: () => {},
 };
 
-export const DropdownContext = createContext<ContextType>(initValue);
+const DropdownContext = createContext<DropdownContextType>(initValue);
 
 export const DropdownProvider = ({ children }: PropsWithChildren) => {
   const [open, setOpen] = useState(false);
@@ -26,3 +26,14 @@ export const DropdownProvider = ({ children }: PropsWithChildren) => {
     </DropdownContext.Provider>
   );
 };
+
+export default DropdownContext;
+
+// export const useDropdownContext = (): ContextType => {
+//   const context = useContext(DropdownContext);
+
+//   if (!context) {
+//     throw new Error("useDropdownContext must be used within a DropdownProvider");
+//   }
+//   return context;
+// };

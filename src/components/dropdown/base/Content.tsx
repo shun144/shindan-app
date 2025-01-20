@@ -1,6 +1,6 @@
-import { useContext, PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
 import { Transition } from "@headlessui/react";
-import { DropdownContext } from "./DropdownContext";
+import { useDropdownContext } from "@/hooks/useDropdownContext";
 
 type Props = PropsWithChildren<{
   align?: "left" | "right";
@@ -14,7 +14,7 @@ export const Content = ({
   contentClasses = "py-1 bg-white",
   children,
 }: Props) => {
-  const { open, setOpen } = useContext(DropdownContext);
+  const { open, setOpen } = useDropdownContext();
 
   let alignmentClasses = "origin-top";
 

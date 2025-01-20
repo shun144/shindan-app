@@ -2,22 +2,22 @@ import { useEffect, useState } from "react";
 
 type Props = {
   value: string;
-  handleChange: (value: string) => void;
+  onChange: (value: string) => void;
   debounce?: number;
   className: string;
   placeholder: string;
 };
 
-const DebouncedInput = ({ value: initValue, handleChange, debounce = 500, ...props }: Props) => {
+const DebouncedInput = ({ onChange, debounce = 500, ...props }: Props) => {
   const [value, setValue] = useState("");
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      handleChange(value);
+      onChange(value);
     }, debounce);
 
     return () => clearTimeout(timeout);
-  }, [value]);
+  }, [value, debounce, onChange]);
 
   return <input {...props} value={value} onChange={(e) => setValue(e.currentTarget.value)} />;
 };

@@ -1,8 +1,8 @@
-import { useContext, PropsWithChildren } from "react";
-import { DropdownContext } from "./DropdownContext";
+import { PropsWithChildren } from "react";
+import { useDropdownContext } from "@/hooks/useDropdownContext";
 
 export const Trigger = ({ children }: PropsWithChildren) => {
-  const { open, setOpen, toggleOpen } = useContext(DropdownContext);
+  const { open, setOpen, toggleOpen } = useDropdownContext();
 
   function handleClickClose() {
     setOpen(false);

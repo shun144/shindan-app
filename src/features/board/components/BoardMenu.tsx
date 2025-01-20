@@ -1,6 +1,6 @@
 import { memo, useMemo } from "react";
 import { Menu, Item } from "react-contexify";
-import { toast } from "@/components/toast/MyToaster";
+import { toast } from "react-hot-toast";
 import "@/features/board/assets/boardMenu.scss";
 import { type BoardItemType } from "@/features/board/types";
 import useDeleteFlow from "@/features/board/hooks/useDeleteFlow";
@@ -32,7 +32,7 @@ const BoardMenu = ({ menuId, boardItem, handleOpenEditModal }: Props) => {
       toast.success("URLをクリップボードにコピーしました", {
         duration: 3000,
       });
-    } catch (error) {
+    } catch {
       toast.error("URLのコピーに失敗しました", { duration: 3000 });
     }
   };

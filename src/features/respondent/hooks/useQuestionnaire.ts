@@ -1,10 +1,20 @@
 import { useEffect, useState } from "react";
 
-import { useAppDispatch, useAppSelector } from "@/store/store";
+import { useAppDispatch } from "@/store/store";
 import { respondentActions } from "@/features/respondent/stores";
-import { RespondentItem, DbQuestionType, DbResultType, DbEdgeType } from "@/features/respondent/types";
+import {
+  RespondentItem,
+  DbQuestionType,
+  DbResultType,
+  DbEdgeType,
+} from "@/features/respondent/types";
 
-const useQuestionnaire = (questions: string, results: string, edges: string, firstQuestionId: string) => {
+const useQuestionnaire = (
+  questions: string,
+  results: string,
+  edges: string,
+  firstQuestionId: string
+) => {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -44,7 +54,7 @@ const useQuestionnaire = (questions: string, results: string, edges: string, fir
     dispatch(respondentActions.setFirstQuestionId(firstQuestionId));
     dispatch(respondentActions.setCurrItem(firstQuestionId));
     setIsLoading(false);
-  }, []);
+  }, [dispatch, edges, firstQuestionId, questions, results]);
 
   return { isLoading };
 };

@@ -11,7 +11,6 @@ const ProfileRoute = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm({
     mode: "onBlur",
     defaultValues: {
@@ -22,6 +21,7 @@ const ProfileRoute = () => {
   });
 
   const onSubmit = (data: { userName: string; shopName: string; email: string }) => {
+    console.log(data);
     // updateTitleUrlMutation.mutate({
     //   userId: userId!
     //   title: data.title,

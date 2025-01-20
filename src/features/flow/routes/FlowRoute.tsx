@@ -1,9 +1,9 @@
 import { memo, Suspense } from "react";
 import { ReactFlowProvider } from "@xyflow/react";
 import { Await, useLoaderData } from "react-router-dom";
-import { MyToaster } from "@/components/toast/MyToaster";
+import { MyToaster } from "@/components";
 import { Flow, QuestionSubMenu, ResultSubMenu } from "@/features/flow/components";
-import { FlowProvider } from "@/features/flow/contexts";
+import FlowProvider from "@/features/flow/contexts/FlowProvider";
 
 import { type LoaderData } from "./flowLoader";
 import { MainHeader } from "@/layouts";

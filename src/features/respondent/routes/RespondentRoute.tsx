@@ -1,7 +1,7 @@
 import { memo, Suspense } from "react";
 import { Await, useLoaderData } from "react-router-dom";
 import Respondent from "../components/Respondent";
-import { type RespondentLoaderData } from "./RespondentLoader";
+import { type RespondentLoaderData } from "./respondentLoader";
 import "@/features/respondent/assets/Result.css";
 
 const RespondentRoute = () => {

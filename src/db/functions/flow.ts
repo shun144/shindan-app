@@ -160,7 +160,7 @@ export const updateFlow = async (args: UpdateFlowArgs) => {
     // let uploadedImageMetadata: UploadedImageMetadata | null = null;
 
     let newUpdateFlowData = { ...updateFlowData };
-    if (!!flowFiles) {
+    if (flowFiles) {
       const uploadedImageMetadata = await uploadMultiImage(flowFiles, args.userId);
 
       const prevResults: NodeProps<Node<ResultNodeType>>[] = JSON.parse(updateFlowData.results);
@@ -215,7 +215,7 @@ export async function uploadMultiImage(
     const uploadedMetadata = await Promise.all(uploadPromises);
 
     return uploadedMetadata;
-  } catch (error) {
+  } catch {
     return []; // エラー時は空配列を返す
   }
 }
@@ -343,7 +343,9 @@ export class RespondentData {
 
 const flowConverter: FirestoreDataConverter<RespondentData> = {
   toFirestore(data: RespondentData): DocumentData {
-    return {};
+    return {
+      data,
+    };
   },
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): RespondentData {
     const data = snapshot.data(options)!;
@@ -394,21 +396,17 @@ const flowConverter: FirestoreDataConverter<RespondentData> = {
  * @returns
  */
 export const fetchFlowByUrl = async (shopName: string, flowUrl: string) => {
-  try {
-    const userId = await getUserIdByShopName(shopName);
+  const userId = await getUserIdByShopName(shopName);
 
-    if (userId === null) {
-      throw new Error("指定されたショップが見つかりません");
-    }
-
-    const flowData = await getFlowDataByUserId(userId, flowUrl);
-    if (flowData === null) {
-      throw new Error("指定されたURLのアンケートが見つかりません");
-    }
-    return flowData;
-  } catch (error) {
-    throw error;
+  if (userId === null) {
+    throw new Error("指定されたショップが見つかりません");
   }
+
+  const flowData = await getFlowDataByUserId(userId, flowUrl);
+  if (flowData === null) {
+    throw new Error("指定されたURLのアンケートが見つかりません");
+  }
+  return flowData;
 };
 
 // ユーザIDを取得する関数

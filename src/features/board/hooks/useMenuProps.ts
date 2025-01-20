@@ -1,10 +1,9 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useContextMenu, TriggerEvent } from "react-contexify";
 
 const useMenuProps = () => {
   const MENU_ID = "board-menu";
 
-  //   const title = useRef("");
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
   const [flowId, setFlowId] = useState("");

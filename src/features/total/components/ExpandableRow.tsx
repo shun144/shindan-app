@@ -13,12 +13,18 @@ const ExpandableRow = ({ flowId, colLength, answerNum }: Props) => {
   const maxRowHeight = useMemo(() => 800, []);
 
   // グラフの高さ
-  const chartHeight = useMemo(() => answerNum * 100 + 100, []);
+  const chartHeight = useMemo(() => answerNum * 100 + 100, [answerNum]);
 
   return (
     <tr className="bg-indigo-50 border-b">
       <td colSpan={colLength} className="relative overflow-hidden">
-        <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} transition={{ duration: 0.3, ease: "linear" }} style={{ originY: 0, maxHeight: `${maxRowHeight}px`, overflowY: "scroll" } as MotionStyle}>
+        <motion.div
+          initial={{ height: 0 }}
+          animate={{ height: "auto" }}
+          exit={{ height: 0 }}
+          transition={{ duration: 0.3, ease: "linear" }}
+          style={{ originY: 0, maxHeight: `${maxRowHeight}px`, overflowY: "scroll" } as MotionStyle}
+        >
           <HorizontalBarChart flowId={flowId} chartHeight={chartHeight} />
         </motion.div>
       </td>

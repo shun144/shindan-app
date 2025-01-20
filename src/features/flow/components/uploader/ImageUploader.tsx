@@ -1,7 +1,7 @@
 import { memo, useState, ChangeEvent, MouseEvent, useMemo } from "react";
 import { useViewImage } from "./useViewImage";
 import { useReactFlow } from "@xyflow/react";
-import { useFileContext } from "@/features/flow/contexts";
+import { useFileContext } from "@/features/flow/hooks/useFileContext";
 
 type Props = {
   nodeId: string;
@@ -13,7 +13,7 @@ const ImageUploader = ({ nodeId, initImgUrl }: Props) => {
   // const dispatch = useAppDispatch();
   const { setFile, removeFile } = useFileContext();
   const BASE_URL = useMemo(() => import.meta.env.VITE_BASE_URL, []);
-  const IMG_ID = useMemo(() => `img-${nodeId}`, []);
+  const IMG_ID = useMemo(() => `img-${nodeId}`, [nodeId]);
 
   const [imageData, setImageData] = useState<File | string | undefined>(initImgUrl);
 

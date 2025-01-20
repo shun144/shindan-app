@@ -3,9 +3,12 @@ import { Node, NodeProps, Handle, Position, useReactFlow } from "@xyflow/react";
 import { type ResultNodeType } from "@/features/flow/types";
 import { resultMaxLength, messageMaxLength } from "@/features/flow/constants";
 import { BsThreeDots } from "react-icons/bs";
-import { ImageUploader, showResultContextMenu } from "@/features/flow/components";
+import { ImageUploader } from "@/features/flow/components";
+import { useResultContextMenu } from "@/features/flow/hooks/useResultContextMenu";
 const ResultNode = ({ id: nodeId, data: nodeData }: NodeProps<Node<ResultNodeType>>) => {
   const { updateNodeData } = useReactFlow();
+
+  const { showResultContextMenu } = useResultContextMenu();
 
   const handleUpdateResult = (evt: ChangeEvent<HTMLTextAreaElement>) => {
     updateNodeData(nodeId, {
@@ -26,7 +29,10 @@ const ResultNode = ({ id: nodeId, data: nodeData }: NodeProps<Node<ResultNodeTyp
   return (
     <div className="rounded-md w-96 bg-slate-900 shadow-lg border-slate-300 border-2">
       <div className="h-10 dhandle rounded-t-md bg-orange-500 flex justify-end items-center px-2 transition-all hover:bg-orange-600">
-        <BsThreeDots className="w-6 h-full text-slate-200 text-md cursor-pointer transition-all hover:text-slate-50 hover:bg-orange-400" onClick={handleClickSubmenu} />
+        <BsThreeDots
+          className="w-6 h-full text-slate-200 text-md cursor-pointer transition-all hover:text-slate-50 hover:bg-orange-400"
+          onClick={handleClickSubmenu}
+        />
       </div>
 
       {/* 画像アップロード */}
@@ -36,7 +42,10 @@ const ResultNode = ({ id: nodeId, data: nodeData }: NodeProps<Node<ResultNodeTyp
 
       <div className="flex flex-col justify-center items-center cursor-default pt-3 px-3">
         <div className="w-full flex flex-col justify-center items-center relative">
-          <label htmlFor="result" className="self-start block text-md font-semibold text-orange-400">{`診 断 結 果（${resultMaxLength}文字）`}</label>
+          <label
+            htmlFor="result"
+            className="self-start block text-md font-semibold text-orange-400"
+          >{`診 断 結 果（${resultMaxLength}文字）`}</label>
           <textarea
             id="result"
             rows={3}
@@ -46,13 +55,21 @@ const ResultNode = ({ id: nodeId, data: nodeData }: NodeProps<Node<ResultNodeTyp
             placeholder="診断結果を入力してください"
             maxLength={resultMaxLength}
           ></textarea>
-          <Handle id={nodeId} position={Position.Left} type="target" style={{ cursor: "pointer", top: 18, left: -25 }} />
+          <Handle
+            id={nodeId}
+            position={Position.Left}
+            type="target"
+            style={{ cursor: "pointer", top: 18, left: -25 }}
+          />
         </div>
       </div>
 
       <div className="flex flex-col justify-center items-center cursor-default pt-6 pb-6 px-3">
         <div className="w-full flex flex-col justify-center items-center relative">
-          <label htmlFor="message" className="self-start block text-md font-semibold text-orange-400">{`メッセージ（${messageMaxLength}文字）`}</label>
+          <label
+            htmlFor="message"
+            className="self-start block text-md font-semibold text-orange-400"
+          >{`メッセージ（${messageMaxLength}文字）`}</label>
           <textarea
             id="message"
             rows={5}

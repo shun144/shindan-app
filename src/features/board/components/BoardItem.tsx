@@ -15,7 +15,7 @@ const linkTv = tv({
 });
 
 const BoardItem = ({ boardItem, handleOpenEditModal }: Props) => {
-  const { flowId, title, url } = boardItem;
+  const { flowId, title } = boardItem;
   const menuId = `BOARD-MENU-${flowId}`;
 
   const { show } = useContextMenu({ id: menuId });

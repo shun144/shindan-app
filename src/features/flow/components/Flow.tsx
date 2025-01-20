@@ -16,7 +16,7 @@ import { useAppDispatch } from "@/store/store";
 import { actions } from "@/store/slice/flowSlice";
 import { FlowType } from "@/types";
 import { unstable_usePrompt, useBeforeUnload } from "react-router-dom";
-import { useCommitPendingContext } from "@/features/flow/contexts";
+import { useCommitPendingContext } from "@/features/flow/hooks/useCommitPendingContext";
 
 const Flow = (props: FlowType) => {
   const dispatch = useAppDispatch();
@@ -59,41 +59,44 @@ const Flow = (props: FlowType) => {
       isDirty && currentLocation.pathname !== nextLocation.pathname,
   });
 
-  const handleDragEnd = useCallback(({ active, over, delta, activatorEvent }: DragEndEvent) => {
-    // フロー作成エリア以外にドロップしたら何もしない
-    if (over == null || over.id != "droppableArea") return;
+  const handleDragEnd = useCallback(
+    ({ active, over, delta, activatorEvent }: DragEndEvent) => {
+      // フロー作成エリア以外にドロップしたら何もしない
+      if (over == null || over.id != "droppableArea") return;
 
-    // activatorEventがMouseEventの場合に処理を進める
-    // イベントが他の入力デバイス（例えばタッチデバイス）でも安全に動作すする
-    if (activatorEvent instanceof MouseEvent) {
-      const absoluteX = activatorEvent.pageX + delta.x;
-      const absoluteY = activatorEvent.pageY + delta.y;
+      // activatorEventがMouseEventの場合に処理を進める
+      // イベントが他の入力デバイス（例えばタッチデバイス）でも安全に動作すする
+      if (activatorEvent instanceof MouseEvent) {
+        const absoluteX = activatorEvent.pageX + delta.x;
+        const absoluteY = activatorEvent.pageY + delta.y;
 
-      // デフォルトだとノードが作成される位置が、
-      // ドロップした位置のやや右下になるため微調整
-      const offset = {
-        x: 30,
-        y: 20,
-      };
+        // デフォルトだとノードが作成される位置が、
+        // ドロップした位置のやや右下になるため微調整
+        const offset = {
+          x: 30,
+          y: 20,
+        };
 
-      // ブラウザ上の絶対座標をreactFlow上の座標に変換する
-      const position = screenToFlowPosition({
-        x: absoluteX - offset.x,
-        y: absoluteY - offset.y,
-      });
+        // ブラウザ上の絶対座標をreactFlow上の座標に変換する
+        const position = screenToFlowPosition({
+          x: absoluteX - offset.x,
+          y: absoluteY - offset.y,
+        });
 
-      switch (active.id) {
-        case "draggable-question":
-          onAddQuestion(position);
-          break;
-        case "draggable-result":
-          onAddResult(position);
-          break;
-        default:
-          break;
+        switch (active.id) {
+          case "draggable-question":
+            onAddQuestion(position);
+            break;
+          case "draggable-result":
+            onAddResult(position);
+            break;
+          default:
+            break;
+        }
       }
-    }
-  }, []);
+    },
+    [screenToFlowPosition, onAddQuestion, onAddResult]
+  );
 
   return (
     <div className="grow w-full flex relative">

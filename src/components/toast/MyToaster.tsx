@@ -1,4 +1,4 @@
-import { Toaster, ToastPosition, toast } from "react-hot-toast";
+import { Toaster, ToastPosition } from "react-hot-toast";
 
 type Props = {
   position?: ToastPosition;
@@ -22,4 +22,4 @@ const MyToaster = ({ position = "bottom-right", duration = 3000 }: Props) => {
   );
 };
 
-export { MyToaster, toast };
+export default MyToaster;

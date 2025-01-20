@@ -16,7 +16,7 @@ export default forwardRef(function TextInput(
 
   useEffect(() => {
     if (isFocused) localRef.current?.focus();
-  }, []);
+  }, [isFocused]);
 
   return <input {...props} type={type} className={inputTv({ className })} ref={localRef} />;
 });

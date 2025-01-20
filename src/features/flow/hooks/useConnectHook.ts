@@ -4,27 +4,33 @@ import { Edge, Connection, addEdge, reconnectEdge } from "@xyflow/react";
 const useConnectHook = (setEdges: Dispatch<SetStateAction<Edge[]>>) => {
   const edgeReconnSuccess = useRef(true);
   // edgeの再接続時イベント
-  const onReconnect = useCallback((oldEdge: Edge, newConn: Connection) => {
-    const isConnectSelf = oldEdge.source === newConn.target || newConn.source === oldEdge.target;
+  const onReconnect = useCallback(
+    (oldEdge: Edge, newConn: Connection) => {
+      const isConnectSelf = oldEdge.source === newConn.target || newConn.source === oldEdge.target;
 
-    // 自分自身に接続できないようにする
-    if (isConnectSelf) return;
+      // 自分自身に接続できないようにする
+      if (isConnectSelf) return;
 
-    edgeReconnSuccess.current = true;
-    setEdges((eds) => reconnectEdge(oldEdge, newConn, eds));
-  }, []);
+      edgeReconnSuccess.current = true;
+      setEdges((eds) => reconnectEdge(oldEdge, newConn, eds));
+    },
+    [setEdges]
+  );
 
   // edgeの再接続開始時イベント
   const onReconnectStart = useCallback(() => {
     edgeReconnSuccess.current = false;
   }, []);
 
-  const onReconnectEnd = useCallback((edge: Edge) => {
-    if (!edgeReconnSuccess.current) {
-      setEdges((eds) => eds.filter((ed) => ed.id !== edge.id));
-    }
-    edgeReconnSuccess.current = true;
-  }, []);
+  const onReconnectEnd = useCallback(
+    (edge: Edge) => {
+      if (!edgeReconnSuccess.current) {
+        setEdges((eds) => eds.filter((ed) => ed.id !== edge.id));
+      }
+      edgeReconnSuccess.current = true;
+    },
+    [setEdges]
+  );
 
   const onConnect = useCallback(
     (params: Connection | Edge) => {

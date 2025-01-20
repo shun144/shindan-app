@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { actions } from "@/store/slice/flowSlice";
-import { toast } from "@/components/toast/MyToaster";
+import { toast } from "react-hot-toast";
 import * as yup from "yup";
 import { checkIsDupUrl } from "@/db/functions/flow";
 import { checkDummyAuthStatus } from "@/utils/userUtils";
@@ -12,7 +12,7 @@ const useFlowSubmitValidate = (flowId: string) => {
     flowUrl: state.flow.flowUrl,
   }));
 
-  const userId = checkDummyAuthStatus() as string;
+  const { userId } = checkDummyAuthStatus();
 
   const dispatch = useAppDispatch();
 

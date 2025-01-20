@@ -19,7 +19,7 @@ const Respondent = ({ respondentData }: Props) => {
     dispatch(actions.setItems([...questions, ...results]));
     dispatch(actions.setCurrItem(initFirstQuestionId));
     dispatch(actions.setFirstQuestionId(initFirstQuestionId));
-  }, []);
+  }, [dispatch, initFirstQuestionId, questions, results]);
 
   return (
     <>

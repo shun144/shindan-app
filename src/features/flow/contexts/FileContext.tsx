@@ -1,11 +1,11 @@
-import { createContext, useState, PropsWithChildren, useContext } from "react";
+import { createContext, useState, PropsWithChildren } from "react";
 import { type FlowFiles } from "@/features/flow/types";
 
-interface FileContextType {
+export type FileContextType = {
   flowFiles: FlowFiles;
   setFile: (id: string, file: File) => void; // ファイルを追加または更新
   removeFile: (id: string) => void; // ファイルを削除
-}
+};
 
 const FileContext = createContext<FileContextType | undefined>(undefined);
 
@@ -41,14 +41,12 @@ export const FileProvider = ({ children }: PropsWithChildren) => {
   );
 };
 
-/**
- * FileContextからvalueを取得するためのラッパーhooks
- * @returns FileContextpe
- */
-export const useFileContext = (): FileContextType => {
-  const context = useContext(FileContext);
-  if (!context) {
-    throw new Error("useFileContext must be used within a FileProvider");
-  }
-  return context;
-};
+export default FileContext;
+
+// export const useFileContext = (): FileContextType => {
+//   const context = useContext(FileContext);
+//   if (!context) {
+//     throw new Error("useFileContext must be used within a FileProvider");
+//   }
+//   return context;
+// };

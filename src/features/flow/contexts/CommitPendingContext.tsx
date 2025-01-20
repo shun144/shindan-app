@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, useState, useContext } from "react";
+import { createContext, PropsWithChildren, useState } from "react";
 
 export interface CommitPendingContextType {
   isCommitPending: boolean;
@@ -22,10 +22,4 @@ export const CommitPendingProvider = ({ children }: PropsWithChildren) => {
   );
 };
 
-export const useCommitPendingContext = (): CommitPendingContextType => {
-  const context = useContext(CommitPendingContext);
-  if (!context) {
-    throw new Error("useCommitPendingContext must be used within a CommitPendingProvider");
-  }
-  return context;
-};
+export default CommitPendingContext;

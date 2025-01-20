@@ -1,9 +1,18 @@
-import { useState, memo, Fragment, useMemo } from "react";
+import { useState, memo, Fragment, useMemo, useCallback } from "react";
 import DebouncedInput from "@/components/input/DebouncedInput";
 import { IoSearchOutline } from "react-icons/io5";
 import ExpandableRow from "./ExpandableRow";
 import { AnimatePresence } from "framer-motion";
-import { useReactTable, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, flexRender, createColumnHelper, getSortedRowModel, SortingState } from "@tanstack/react-table";
+import {
+  useReactTable,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  flexRender,
+  createColumnHelper,
+  getSortedRowModel,
+  SortingState,
+} from "@tanstack/react-table";
 import { TotalTableData } from "@/db/functions/total";
 
 type Props = {
@@ -55,7 +64,11 @@ const TotalTable = ({ totalTableData }: Props) => {
               toggleRow(row.index);
             }}
             className={`select-none transtion-all duration-200
-              ${expandedRows[row.index] ? "text-red-400 hover:text-red-700" : "text-indigo-400 hover:text-indigo-700"}`}
+              ${
+                expandedRows[row.index]
+                  ? "text-red-400 hover:text-red-700"
+                  : "text-indigo-400 hover:text-indigo-700"
+              }`}
           >
             {expandedRows[row.index] ? "閉じる" : "表示"}
           </button>
@@ -82,6 +95,13 @@ const TotalTable = ({ totalTableData }: Props) => {
     },
   });
 
+  const handleChange = useCallback(
+    (value: string) => {
+      setGlobalFilter(value);
+    },
+    [setGlobalFilter]
+  );
+
   return (
     <div className="max-w-full w-11/12 mx-auto sm:px-6 lg:py-8">
       <div className="bg-white overflow-hidden shadow-sm">
@@ -93,7 +113,12 @@ const TotalTable = ({ totalTableData }: Props) => {
             </div>
 
             <div className="h-full flex justify-center items-center">
-              <DebouncedInput value={globalFilter ?? ""} handleChange={(value) => setGlobalFilter(String(value))} className="w-96 h-12 bg-transparent outline-none border rounded-r border-slate-300 focus:ring-0 focus:border-blue-500 placeholder:text-slate-400" placeholder="検索" />
+              <DebouncedInput
+                value={globalFilter ?? ""}
+                onChange={handleChange}
+                className="w-96 h-12 bg-transparent outline-none border rounded-r border-slate-300 focus:ring-0 focus:border-blue-500 placeholder:text-slate-400"
+                placeholder="検索"
+              />
             </div>
           </div>
 
@@ -113,9 +138,19 @@ const TotalTable = ({ totalTableData }: Props) => {
                       >
                         {header.isPlaceholder ? null : (
                           <div
-                            className={`px-3 py-3 ${header.column.getCanSort() ? "cursor-pointer select-none" : ""}`}
+                            className={`px-3 py-3 ${
+                              header.column.getCanSort() ? "cursor-pointer select-none" : ""
+                            }`}
                             onClick={header.column.getToggleSortingHandler()}
-                            title={header.column.getCanSort() ? (header.column.getNextSortingOrder() === "asc" ? "昇順ソート" : header.column.getNextSortingOrder() === "desc" ? "降順ソート" : "元の並びに戻す") : undefined}
+                            title={
+                              header.column.getCanSort()
+                                ? header.column.getNextSortingOrder() === "asc"
+                                  ? "昇順ソート"
+                                  : header.column.getNextSortingOrder() === "desc"
+                                  ? "降順ソート"
+                                  : "元の並びに戻す"
+                                : undefined
+                            }
                           >
                             {flexRender(header.column.columnDef.header, header.getContext())}
                             {{
@@ -134,7 +169,11 @@ const TotalTable = ({ totalTableData }: Props) => {
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
                   <Fragment key={row.id}>
-                    <tr key={row.id} data-state={row.getIsSelected() && "selected"} className="bg-white border-b ">
+                    <tr
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                      className="bg-white border-b "
+                    >
                       {row.getVisibleCells().map((cell) => (
                         <td
                           key={cell.id}
@@ -151,7 +190,16 @@ const TotalTable = ({ totalTableData }: Props) => {
                     </tr>
 
                     {/* グラフ表示 */}
-                    <AnimatePresence>{expandedRows[row.index] && <ExpandableRow key={`graph_${row.id}`} flowId={row.original.id} colLength={columns.length} answerNum={row.original.answerNum} />}</AnimatePresence>
+                    <AnimatePresence>
+                      {expandedRows[row.index] && (
+                        <ExpandableRow
+                          key={`graph_${row.id}`}
+                          flowId={row.original.id}
+                          colLength={columns.length}
+                          answerNum={row.original.answerNum}
+                        />
+                      )}
+                    </AnimatePresence>
                   </Fragment>
                 ))
               ) : (
@@ -167,19 +215,33 @@ const TotalTable = ({ totalTableData }: Props) => {
           {/* ページネーション */}
           <div className="flex items-center justify-center mt-4 gap-8">
             <div className="w-12 flex justify-center gap-2">
-              <button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()} className="p-1 border border-gray-300 px-2 disabled:opacity-30 select-none cursor-pointer">
+              <button
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+                className="p-1 border border-gray-300 px-2 disabled:opacity-30 select-none cursor-pointer"
+              >
                 {"<"}
               </button>
-              <button onClick={() => table.nextPage()} disabled={!table.getCanNextPage()} className="p-1 border border-gray-300 px-2 disabled:opacity-30 select-none cursor-pointer">
+              <button
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+                className="p-1 border border-gray-300 px-2 disabled:opacity-30 select-none cursor-pointer"
+              >
                 {">"}
               </button>
             </div>
 
             <div className="flex items-center">
-              <div className="text-gray-500">{`${table.getState().pagination.pageIndex + 1} / ${table.getPageCount()}`}</div>
+              <div className="text-gray-500">{`${
+                table.getState().pagination.pageIndex + 1
+              } / ${table.getPageCount()}`}</div>
             </div>
 
-            <select value={table.getState().pagination.pageSize} onChange={(e) => table.setPageSize(Number(e.currentTarget.value))} className="py-2 pr-8 bg-transparent cursor-pointer select-none border-1 border-slate-200 text-slate-600 focus:ring-0 focus:border-blue-500 text-sm">
+            <select
+              value={table.getState().pagination.pageSize}
+              onChange={(e) => table.setPageSize(Number(e.currentTarget.value))}
+              className="py-2 pr-8 bg-transparent cursor-pointer select-none border-1 border-slate-200 text-slate-600 focus:ring-0 focus:border-blue-500 text-sm"
+            >
               {[10, 20, 30, 50].map((pageSize) => (
                 <option key={pageSize} value={pageSize}>
                   {`${pageSize} 行表示`}

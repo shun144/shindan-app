@@ -1,4 +1,12 @@
-import { QueryFieldFilterConstraint, runTransaction, FirestoreError, doc, addDoc, setDoc, query, where, getDoc, getDocs, updateDoc, deleteDoc, Timestamp, collection, FieldPath, documentId, DocumentData, QueryDocumentSnapshot, SnapshotOptions, FirestoreDataConverter } from "firebase/firestore";
+import {
+  QueryFieldFilterConstraint,
+  runTransaction,
+  doc,
+  query,
+  where,
+  getDocs,
+  collection,
+} from "firebase/firestore";
 import { db } from "@/db/firebase";
 
 /**
@@ -48,7 +56,11 @@ function updateAnswerHistories(histories: StoredAnswerHistory[], answer: string)
   return updatedItems;
 }
 
-export const countUpAnswerHistory = async ({ shopName, url, answer }: AddAnswerHistoryArgs): Promise<void> => {
+export const countUpAnswerHistory = async ({
+  shopName,
+  url,
+  answer,
+}: AddAnswerHistoryArgs): Promise<void> => {
   try {
     const userId = await getDocId("users", where("shopName", "==", shopName));
     if (userId === null) {

@@ -1,5 +1,6 @@
 import { PropsWithChildren } from "react";
-import { FileProvider, CommitPendingProvider } from "@/features/flow/contexts";
+import { FileProvider } from "./FileContext";
+import { CommitPendingProvider } from "./CommitPendingContext";
 
 const FlowProvider = ({ children }: PropsWithChildren) => {
   return (

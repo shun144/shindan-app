@@ -7,10 +7,13 @@ const FlowTitleInput = () => {
   const flowTitle = useAppSelector((state) => state.flow.flowTitle);
   const submitTitleError = useAppSelector((state) => state.flow.submitTitleError);
 
-  const handleChangeTitle = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(actions.setFlowTitle(e.currentTarget.value));
-    dispatch(actions.setIsDirty(true));
-  }, []);
+  const handleChangeTitle = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      dispatch(actions.setFlowTitle(e.currentTarget.value));
+      dispatch(actions.setIsDirty(true));
+    },
+    [dispatch]
+  );
 
   return (
     <div className="w-full flex flex-col pr-4">

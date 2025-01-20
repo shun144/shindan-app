@@ -31,7 +31,6 @@ const Button = ({
   type = "button",
   children,
   buttonProps = { variant: "primary" },
-  disabled = false,
   className = "",
   ...props
 }: Props) => {

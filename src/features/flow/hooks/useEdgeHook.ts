@@ -16,7 +16,9 @@ const useEdgeHook = (initialEdges: Edge[]) => {
             return {
               ...ed,
               animated: !ed.animated,
-              style: ed.animated ? { stroke: "gray", strokeWidth: 2 } : { stroke: "gold", strokeWidth: 3 },
+              style: ed.animated
+                ? { stroke: "gray", strokeWidth: 2 }
+                : { stroke: "gold", strokeWidth: 3 },
             };
           } else {
             return {
@@ -44,7 +46,7 @@ const useEdgeHook = (initialEdges: Edge[]) => {
       setEdges((oldEdges) => applyEdgeChanges(changes, oldEdges));
       dispatch(actions.setIsDirty(true));
     },
-    [setEdges]
+    [setEdges, dispatch]
   );
 
   return {

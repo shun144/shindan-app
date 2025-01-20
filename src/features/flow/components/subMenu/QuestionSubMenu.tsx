@@ -1,20 +1,13 @@
 import { memo } from "react";
-import { Menu, Item, TriggerEvent, ItemParams, useContextMenu } from "react-contexify";
+import { Menu, Item, ItemParams } from "react-contexify";
 import { useReactFlow } from "@xyflow/react";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { actions } from "@/store/slice/flowSlice";
-
-const QUESTION_MENU_ID = "question-menu-id";
-const { show } = useContextMenu({ id: QUESTION_MENU_ID });
-
-export const showQuestionContextMenu = (event: TriggerEvent, nodeId: string) => {
-  show({ event, props: { nodeId } });
-};
+import { QUESTION_MENU_ID } from "@/features/flow/hooks/useQuestionContextMenu";
 
 const QuestionSubMenu = () => {
   const { deleteElements } = useReactFlow();
   const firstNodeId = useAppSelector((state) => state.flow.firstNodeId);
-
   const dispatch = useAppDispatch();
 
   const handleUpdateFirstQuestion = (params: ItemParams) => {

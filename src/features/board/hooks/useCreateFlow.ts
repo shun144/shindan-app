@@ -10,7 +10,7 @@ const useCreateFlow = (closeModal: () => void) => {
   const {
     register,
     handleSubmit,
-    formState: { isDirty, isValid, errors },
+    formState: { errors },
   } = useForm({
     mode: "onBlur",
     defaultValues: { title: "", url: "" },

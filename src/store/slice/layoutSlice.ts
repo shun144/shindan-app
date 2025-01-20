@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { type FlowState, type FlowImage } from "@/store/types";
 
 const initialState = {
   isSidebarOpen: true,
