@@ -1,0 +1,20 @@
+/*
+/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_
+サブメニューのスタイル
+/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_
+*/
+
+// https://fkhadra.github.io/react-contexify/how-to-style
+.contexify {
+  --contexify-menu-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); // box-shadow
+  border: 1px solid rgba(0, 0, 0, 0.15);
+
+  & > .contexify_item {
+    & > .contexify_itemContent {
+      --contexify-activeItem-color: rgba(0, 0, 0, 0.8); // アイテムフォーカス時の文字色
+      --contexify-activeItem-bgColor: rgba(0, 0, 0, 0.1); // アイテムフォーカス時の背景色
+
+      font-size: 15px;
+    }
+  }
+}

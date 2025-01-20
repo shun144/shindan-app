@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import flowReducer from "@/store/slice/flowSlice";
 import layoutReducer from "@/store/slice/layoutSlice";
-import respondentReducer from "@/store/slice/respondentSlice";
+import respondentReducer from "@/features/respondent/stores/respondentSlice";
 import userReducer from "@/store/slice/userSlice";
 
 // import { persistStore, persistReducer } from "redux-persist";
@@ -18,7 +18,6 @@ import userReducer from "@/store/slice/userSlice";
 //   return next(action);
 // };
 
-
 // const persistedReducer = persistReducer(persistConfig, userReducer);
 
 const store = configureStore({
@@ -33,9 +32,7 @@ const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: {
         // 非シリアライズ可能な値を無視するための例外を指定
-        ignoredActions: [
-          "persist/PERSIST",
-        ],
+        ignoredActions: ["persist/PERSIST"],
       },
     }),
 });

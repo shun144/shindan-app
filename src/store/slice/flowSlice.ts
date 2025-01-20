@@ -10,7 +10,7 @@ const initialState: FlowState = {
   qNodeNum: 0,
   rNodeNum: 0,
   isSidebarOpen: true,
-  flowImages: [],
+  // flowImages: [],
   // submitError: null,
 };
 
@@ -46,17 +46,17 @@ const flowSlice = createSlice({
     setIsDirty(state, { payload }: PayloadAction<boolean>) {
       state.isDirty = payload;
     },
-    addImage(state, { payload }: PayloadAction<FlowImage>) {
-      state.flowImages = [...state.flowImages, payload];
-    },
-    delImage(state, { payload }: PayloadAction<string>) {
-      state.flowImages = state.flowImages.filter((x) => x.nodeId !== payload);
-    },
+    // addImage(state, { payload }: PayloadAction<FlowImage>) {
+    //   state.flowImages = [...state.flowImages, payload];
+    // },
+    // delImage(state, { payload }: PayloadAction<string>) {
+    //   state.flowImages = state.flowImages.filter((x) => x.nodeId !== payload);
+    // },
     setSubmitTItleError(state, { payload }: PayloadAction<string | undefined>) {
-      state.submitTitleError = payload
+      state.submitTitleError = payload;
     },
     setSubmitUrlError(state, { payload }: PayloadAction<string | undefined>) {
-      state.submitUrlError = payload
+      state.submitUrlError = payload;
     },
     clearSubmitError(state) {
       state.submitTitleError = undefined;
@@ -71,7 +71,6 @@ const flowSlice = createSlice({
     //   }
     //   state.submitError = { ...state.submitError, ...payload }
     // }
-
   },
 });
 

@@ -1,48 +1,33 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { type UserState } from "@/store/types";
+import { addUser } from "@/db/utils";
 
-
-const getOrGenerateUserID = () => {
-  const storedUserID = localStorage.getItem('userId');
-
-  if (storedUserID) {
-    return storedUserID;
+const getOrGenerateUserInfo = () => {
+  const storedUserInfo = localStorage.getItem("userInfo");
+  if (storedUserInfo) {
+    return JSON.parse(storedUserInfo);
   }
 
-  // const newUserID = `user-${Math.random().toString(36).substr(2, 9)}`;
-  const newUserId = "1";
-  localStorage.setItem('userId', newUserId);
-  return newUserId;
+  const newUserInfo: UserState = {
+    userId: "1",
+    userName: "test",
+    shopName: "SampleShop",
+    email: "test@sample.com",
+  };
+
+  localStorage.setItem("userInfo", JSON.stringify(newUserInfo));
+  addUser(newUserInfo);
+  return newUserInfo;
 };
 
-
-const initialState: UserState = {
-  userId: getOrGenerateUserID(),
-  userName: "test",
-  shopName: "SampleShop",
-  mail: "test@sample.com",
-};
+const initialState: UserState = getOrGenerateUserInfo();
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser(state, { payload }: PayloadAction<UserState>) {
+    setUserInfo(state, { payload }: PayloadAction<UserState>) {
       return { ...state, ...payload };
-    },
-
-    setUserId(state, { payload }: PayloadAction<string>) {
-      state.userId = payload;
-      localStorage.setItem('userId', payload);
-    },
-    setUserName(state, { payload }: PayloadAction<string>) {
-      state.userName = payload;
-    },
-    setMail(state, { payload }: PayloadAction<string>) {
-      state.mail = payload;
-    },
-    setShopName(state, { payload }: PayloadAction<string>) {
-      state.shopName = payload;
     },
   },
 });

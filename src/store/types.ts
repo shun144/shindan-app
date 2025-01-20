@@ -1,4 +1,4 @@
-import { RespondentItem, AnswerHistoryType } from "@/components/respondent/types";
+import { RespondentItem, AnswerHistoryType } from "@/features/respondent/types";
 
 export interface FlowImage {
   nodeId: string;
@@ -6,10 +6,9 @@ export interface FlowImage {
 }
 
 export type SubmitError = {
-  title?: string,
-  url?: string,
+  title?: string;
+  url?: string;
 } | null;
-
 
 export interface FlowState {
   flowId?: number;
@@ -20,7 +19,7 @@ export interface FlowState {
   qNodeNum: number;
   rNodeNum: number;
   isSidebarOpen: boolean;
-  flowImages: FlowImage[];
+  // flowImages: FlowImage[];
   // submitError: SubmitError | null,
   submitTitleError?: string;
   submitUrlError?: string;
@@ -36,11 +35,9 @@ export interface RespondentState {
   firstQuestionId: string;
 }
 
-export interface UserState {
+export type UserState = {
   userId: string;
   userName: string;
-  mail: string;
+  email: string;
   shopName: string;
-}
-
-
+};
