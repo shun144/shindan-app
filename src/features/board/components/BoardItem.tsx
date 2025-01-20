@@ -39,11 +39,11 @@ const BoardItem = ({ boardItem, handleOpenEditModal }: Props) => {
             </div>
           </div>
           <div className="h-9/12 w-full overflow-hidden">
-            <img
+            {/* <img
               src="https://picsum.photos/300/200?blur"
               alt="ランダム画像"
               className="object-cover"
-            />
+            /> */}
           </div>
         </div>
       </Link>
