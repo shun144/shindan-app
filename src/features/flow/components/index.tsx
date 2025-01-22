@@ -11,3 +11,5 @@ export { default as ResultSubMenu } from "./subMenu/ResultSubMenu";
 
 export { default as ImageUploader } from "./uploader/ImageUploader";
 export { default as ChoiceSourceHandle } from "./handles/ChoiceSourceHandle";
+
+export { default as FlowSkeleton } from "./skeleton/FlowSkeleton";
