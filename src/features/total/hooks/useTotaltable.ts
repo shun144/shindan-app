@@ -9,14 +9,18 @@ import {
   // ColumnDef,
   // AccessorKeyColumnDef,
   // DisplayColumnDef,
+  ColumnDef,
 } from "@tanstack/react-table";
 import { TotalTableData } from "@/db/functions/total";
-import type { ColumnsType } from "@/features/total/types";
+// import type { ColumnsType } from "@/features/total/types";
 
 type Props = {
-  totalTableColumns: ColumnsType<TotalTableData>;
+  // totalTableColumns: ColumnsType<TotalTableData>;
   // totalTableColumns: ColumnDef<TotalTableData, any>[];
   // totalTableColumns: (DisplayColumnDef<TotalTableData> | AccessorKeyColumnDef<TotalTableData>)[];
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  totalTableColumns: ColumnDef<TotalTableData, any>[];
   totalTableData: TotalTableData[];
 };
 

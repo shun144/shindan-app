@@ -10,6 +10,17 @@ type Args = {
 
 const columnHelper = createColumnHelper<TotalTableData>();
 
+// const test = columnHelper.accessor("id", {
+//   header: "ID",
+//   size: 20,
+// });
+
+// const test2 = columnHelper.accessor("totalCount", {
+//   header: "合計",
+//   size: 25,
+//   cell: ({ getValue }) => <div className="text-start">{getValue()}</div>,
+// });
+
 export const getTotalTableColumns = ({ expandedRows, setExpandedRows }: Args) => {
   const totalTableColumns = [
     columnHelper.accessor("id", {

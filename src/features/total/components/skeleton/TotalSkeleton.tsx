@@ -1,7 +1,7 @@
-import React from "react";
+import { memo } from "react";
 
 const TotalSkeleton = () => {
   return <div role="status" className=""></div>;
 };
 
-export default TotalSkeleton;
+export default memo(TotalSkeleton);
