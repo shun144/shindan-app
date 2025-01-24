@@ -8,8 +8,8 @@ const TotalRoute = () => {
   const { total } = useLoaderData<TotalLoaderData>();
 
   return (
-    <div className="py-6 w-full max-w-screen-lg bg-red-200">
-      <Suspense fallback={<div className="text-red-400">Loading Comments...</div>}>
+    <div className="py-6 w-full max-w-screen-lg">
+      <Suspense fallback={<div className="text-red-50">Loading Comments...</div>}>
         <Await resolve={total} errorElement={<ErrorPage />}>
           {(totalTableData) => <TotalTable totalTableData={totalTableData} />}
         </Await>
