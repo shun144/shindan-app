@@ -27,6 +27,7 @@ export const router = createBrowserRouter([
         element: <TotalRoute />,
         loader: totalLoader,
       },
+
       {
         path: "profile",
         element: <ProfileRoute />,
